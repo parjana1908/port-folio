@@ -138,7 +138,7 @@ function Contact() {
 
           {status === "sending" && (
             <p className="text-sky-600 font-medium text-center">
-              ⏳ Sending... (first message may take ~30 seconds)
+              ⏳ Sending...
             </p>
           )}
 
