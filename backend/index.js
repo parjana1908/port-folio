@@ -1,22 +1,14 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
 const cors = require("cors");
+const { Resend } = require("resend");
 require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -24,24 +16,22 @@ app.post("/send", async (req, res) => {
     return res.status(400).json({ error: "All fields are required." });
   }
 
-  const mailOptions = {
-    from: `"${name}" <${process.env.GMAIL_USER}>`,
-    to: "parjana2003@gmail.com",
-    subject: `New Contact Form Message from ${name}`,
-    html: `
-      <h2>New Message from Contact Form</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
+    await resend.emails.send({
+      from: "Contact Form <onboarding@resend.dev>",
+      to: "parjana2003@gmail.com",
+      subject: `New Contact Form Message from ${name}`,
+      html: `
+        <h2>New Message from Contact Form</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    });
     res.status(200).json({ success: "Email sent successfully!" });
   } catch (error) {
-    console.error("Email error:", error);
+    console.error("Resend error:", error);
     res.status(500).json({ error: "Failed to send email." });
   }
 });
