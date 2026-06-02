@@ -18,7 +18,7 @@ function Contact() {
 
     try {
 
-      const response = await fetch("http://localhost:5000/send", {
+      const response = await fetch("https://port-folio-uhjz.onrender.com/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
