@@ -18,7 +18,7 @@ function Contact() {
 
     try {
 
-      const response = await fetch("https://port-folio-uhjz.onrender.com/send", {
+      const response = await fetch("https://portfolio-we0r.onrender.com/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -138,7 +138,7 @@ function Contact() {
 
           {status === "sending" && (
             <p className="text-sky-600 font-medium text-center">
-              ⏳ Sending...
+              ⏳ Sending... (first message may take ~30 seconds)
             </p>
           )}
 
